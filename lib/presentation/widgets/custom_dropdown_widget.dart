@@ -19,7 +19,7 @@ Widget buildDropdownField({
       ),
       suffixIcon: Icon(
         Icons.arrow_drop_down_rounded,
-        size: AppSizing.w(8),
+        size: AppSizing.h(5),
       ),
     ),
     onTap: () async {
@@ -40,6 +40,7 @@ Future<String?> _showRoleSelectionSheet(BuildContext context) async {
   ];
 
   return await showModalBottomSheet<String>(
+    constraints: const BoxConstraints(minWidth: double.infinity),
     context: context,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),

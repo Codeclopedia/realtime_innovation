@@ -72,10 +72,9 @@ Widget dateOutlinedButton({
 }) {
   return InkWell(
     onTap: isEnabled ? onPressed : null,
-    borderRadius: BorderRadius.circular(AppSizing.w(2)),
+    borderRadius: BorderRadius.circular(5),
     child: Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: AppSizing.w(3), vertical: AppSizing.h(1.5)),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: AppSizing.h(1.5)),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.borderColor),
         borderRadius: BorderRadius.circular(5),
@@ -89,7 +88,7 @@ Widget dateOutlinedButton({
             iconPath,
             height: AppSizing.h(2.5),
           ),
-          SizedBox(width: AppSizing.w(3)),
+          const SizedBox(width: 15),
           Text(
             text,
             style: TextStyle(

@@ -12,6 +12,7 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
   final employeeRepository = EmployeeRepositoryImpl();
 
   runApp(

@@ -53,8 +53,8 @@ Widget calendarScreen(bool isLastDate, DateTime? joiningDate) {
                 ),
                 Text(
                   "${monthName(state.focusedDay.month)} ${state.focusedDay.year}",
-                  style: TextStyle(
-                    fontSize: AppSizing.sp(16),
+                  style: const TextStyle(
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -81,6 +81,7 @@ Widget calendarScreen(bool isLastDate, DateTime? joiningDate) {
                 availableGestures: AvailableGestures.none,
                 headerVisible: false,
                 calendarStyle: const CalendarStyle(
+                  tablePadding: EdgeInsets.zero,
                   todayDecoration: BoxDecoration(
                     shape: BoxShape.circle,
                   ),

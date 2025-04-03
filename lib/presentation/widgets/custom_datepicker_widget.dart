@@ -29,117 +29,118 @@ Future<void> showCustomDatePicker(
           builder: (context, state) {
             return Dialog(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppSizing.w(3)),
+                borderRadius: BorderRadius.circular(20),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(height: AppSizing.h(1)),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: AppSizing.w(3), vertical: AppSizing.h(1)),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 4,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                    ),
-                    itemCount: isLastDate
-                        ? QuickSelectionDate
-                            .quickSelectionLastDateOptions.length
-                        : QuickSelectionDate
-                            .quickSelectJoiningDateOptions.length,
-                    itemBuilder: (context, index) {
-                      final currentQuickSelectionList = isLastDate
-                          ? QuickSelectionDate.quickSelectionLastDateOptions
-                          : QuickSelectionDate.quickSelectJoiningDateOptions;
-                      return _quickSelectButton(
-                          text: currentQuickSelectionList[index]["label"],
-                          onTap: () {
-                            final cubit = context.read<CalendarCubit>();
-                            final label =
-                                currentQuickSelectionList[index]["label"];
-                            final DateTime? actionDate =
-                                currentQuickSelectionList[index]["action"]();
+              child: SizedBox(
+                width: 400,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: AppSizing.h(1)),
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 5),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // More columns on web
+                        childAspectRatio: 4, // Adjust ratio
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemCount: isLastDate
+                          ? QuickSelectionDate
+                              .quickSelectionLastDateOptions.length
+                          : QuickSelectionDate
+                              .quickSelectJoiningDateOptions.length,
+                      itemBuilder: (context, index) {
+                        final currentQuickSelectionList = isLastDate
+                            ? QuickSelectionDate.quickSelectionLastDateOptions
+                            : QuickSelectionDate.quickSelectJoiningDateOptions;
+                        return _quickSelectButton(
+                            text: currentQuickSelectionList[index]["label"],
+                            onTap: () {
+                              final cubit = context.read<CalendarCubit>();
+                              final label =
+                                  currentQuickSelectionList[index]["label"];
+                              final DateTime? actionDate =
+                                  currentQuickSelectionList[index]["action"]();
 
-                            final isDifferentMonth =
-                                state.focusedDay.month != actionDate?.month ||
-                                    state.focusedDay.year != actionDate?.year;
+                              final isDifferentMonth =
+                                  state.focusedDay.month != actionDate?.month ||
+                                      state.focusedDay.year != actionDate?.year;
 
-                            if (isDifferentMonth && label != "No Date") {
-                              cubit.currentMonth();
-                            }
-
-                            if (isLastDate) {
-                              if (label == "No Date") {
-                                cubit.updateSelectedDay(null);
-                              } else if (label == "Today" &&
-                                  actionDate != null) {
-                                if (!isAfter(joiningDate!, actionDate)) {
-                                  cubit.updateSelectedDay(actionDate);
-                                }
+                              if (isDifferentMonth && label != "No Date") {
+                                cubit.currentMonth();
                               }
-                              return;
-                            }
 
-                            cubit.updateSelectedDay(actionDate);
-                          },
-                          isSelected: state.selectedTab ==
-                              currentQuickSelectionList[index]["label"]);
-                    },
-                  ),
-                  calendarScreen(isLastDate, joiningDate),
-                  SizedBox(height: AppSizing.h(2)),
-                  Divider(
-                    thickness: AppSizing.h(0.05),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: AppSizing.w(3),
-                        right: AppSizing.w(3),
-                        bottom: AppSizing.h(1)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            SvgPicture.asset("assets/svg/calendar_icon.svg"),
-                            SizedBox(width: AppSizing.w(2)),
-                            Text(
-                              state.selectedDay == null
-                                  ? "No Date"
-                                  : DateFormat("d MMM yyyy")
-                                      .format(state.selectedDay!),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _actionButton(
-                                text: "Cancel",
-                                isAcceptButton: false,
-                                onTap: () {
-                                  Navigator.pop(context);
-                                }),
-                            SizedBox(width: AppSizing.w(2)),
-                            _actionButton(
-                              text: "Save",
-                              isAcceptButton: true,
-                              onTap: () {
-                                onDateSelected(state.selectedDay);
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+                              if (isLastDate) {
+                                if (label == "No Date") {
+                                  cubit.updateSelectedDay(null);
+                                } else if (label == "Today" &&
+                                    actionDate != null) {
+                                  if (!isAfter(joiningDate!, actionDate)) {
+                                    cubit.updateSelectedDay(actionDate);
+                                  }
+                                }
+                                return;
+                              }
+
+                              cubit.updateSelectedDay(actionDate);
+                            },
+                            isSelected: state.selectedTab ==
+                                currentQuickSelectionList[index]["label"]);
+                      },
                     ),
-                  ),
-                ],
+                    calendarScreen(isLastDate, joiningDate),
+                    SizedBox(height: AppSizing.h(2)),
+                    Divider(
+                      thickness: AppSizing.h(0.05),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15, right: 15, bottom: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              SvgPicture.asset("assets/svg/calendar_icon.svg"),
+                              const SizedBox(width: 10),
+                              Text(
+                                state.selectedDay == null
+                                    ? "No Date"
+                                    : DateFormat("d MMM yyyy")
+                                        .format(state.selectedDay!),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _actionButton(
+                                  text: "Cancel",
+                                  isAcceptButton: false,
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  }),
+                              const SizedBox(width: 10),
+                              _actionButton(
+                                text: "Save",
+                                isAcceptButton: true,
+                                onTap: () {
+                                  onDateSelected(state.selectedDay);
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           },
@@ -177,8 +178,7 @@ Widget _actionButton(
   return TextButton(
     onPressed: onTap,
     style: TextButton.styleFrom(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSizing.w(1.5))),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         backgroundColor: isAcceptButton ?? false
             ? AppColors.buttonBackgroundColor
             : AppColors.unselectedButtonBackgroundColor),
