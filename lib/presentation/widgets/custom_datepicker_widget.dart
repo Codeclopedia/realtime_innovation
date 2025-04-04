@@ -44,8 +44,8 @@ Future<void> showCustomDatePicker(
                           horizontal: 15, vertical: 5),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, // More columns on web
-                        childAspectRatio: 4, // Adjust ratio
+                        crossAxisCount: 2,
+                        childAspectRatio: 4,
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                       ),

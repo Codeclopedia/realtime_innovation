@@ -68,50 +68,80 @@ Widget calendarScreen(bool isLastDate, DateTime? joiningDate) {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: TableCalendar(
-                rowHeight: AppSizing.h(4),
-                daysOfWeekHeight: AppSizing.h(5),
-                focusedDay: state.focusedDay,
-                firstDay: DateTime.utc(2020, 1, 1),
-                lastDay: DateTime.utc(2030, 12, 31),
-                calendarFormat: CalendarFormat.month,
-                shouldFillViewport: false,
-                daysOfWeekVisible: true,
-                availableGestures: AvailableGestures.none,
-                headerVisible: false,
-                calendarStyle: const CalendarStyle(
-                  tablePadding: EdgeInsets.zero,
-                  todayDecoration: BoxDecoration(
-                    shape: BoxShape.circle,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: SizedBox(
+                  child: TableCalendar(
+                    rowHeight: 35,
+                    daysOfWeekHeight: AppSizing.h(5),
+                    focusedDay: state.focusedDay,
+                    firstDay: DateTime.utc(2020, 1, 1),
+                    lastDay: DateTime.utc(2030, 12, 31),
+                    calendarFormat: CalendarFormat.month,
+                    shouldFillViewport: false,
+                    daysOfWeekVisible: true,
+                    availableGestures: AvailableGestures.none,
+                    headerVisible: false,
+                    calendarStyle: const CalendarStyle(
+                      tablePadding: EdgeInsets.zero,
+                      markerSize: 20,
+                      todayDecoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      defaultTextStyle:
+                          TextStyle(color: AppColors.primarytextColor),
+                      weekendTextStyle:
+                          TextStyle(color: AppColors.primarytextColor),
+                      todayTextStyle:
+                          TextStyle(color: AppColors.highlighttextColor),
+                      outsideDaysVisible: false,
+                      disabledTextStyle:
+                          TextStyle(color: AppColors.hintTextColor),
+                    ),
+                    calendarBuilders: CalendarBuilders(
+                      selectedBuilder: (context, date, _) {
+                        double indicatorSize =
+                            AppSizing.h(6); // Adjust this value as needed
+                        return Center(
+                          child: Container(
+                            width: indicatorSize,
+                            height: indicatorSize,
+                            decoration: const BoxDecoration(
+                              color: AppColors
+                                  .highlighttextColor, // Your desired color
+                              shape: BoxShape.circle,
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              '${date.day}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13, // Adjust text size as needed
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    enabledDayPredicate: isLastDate
+                        ? (day) {
+                            return day.isAfter(DateTime(
+                              joiningDate?.year ?? 0,
+                              joiningDate?.month ?? 0,
+                              joiningDate?.day ?? 0,
+                            ));
+                          }
+                        : null,
+                    selectedDayPredicate: (day) {
+                      return isSameDay(state.selectedDay, day);
+                    },
+                    onDaySelected: (selectedDay, focusedDay) {
+                      context
+                          .read<CalendarCubit>()
+                          .updateSelectedDay(selectedDay);
+                    },
                   ),
-                  selectedDecoration: BoxDecoration(
-                    color: AppColors.highlighttextColor,
-                    shape: BoxShape.circle,
-                  ),
-                  defaultTextStyle:
-                      TextStyle(color: AppColors.primarytextColor),
-                  weekendTextStyle:
-                      TextStyle(color: AppColors.primarytextColor),
-                  todayTextStyle:
-                      TextStyle(color: AppColors.highlighttextColor),
-                  outsideDaysVisible: false,
-                  disabledTextStyle: TextStyle(color: AppColors.hintTextColor),
-                ),
-                enabledDayPredicate: isLastDate
-                    ? (day) {
-                        return day.isAfter(DateTime(joiningDate?.year ?? 0,
-                            joiningDate?.month ?? 0, joiningDate?.day ?? 0));
-                      }
-                    : null,
-                selectedDayPredicate: (day) {
-                  return isSameDay(state.selectedDay, day);
-                },
-                onDaySelected: (selectedDay, focusedDay) {
-                  context.read<CalendarCubit>().updateSelectedDay(selectedDay);
-                },
-              ),
-            ),
+                )),
           ],
         );
       },
